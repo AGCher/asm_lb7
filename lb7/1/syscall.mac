@@ -1,0 +1,57 @@
+%macro EXIT 0-1 0
+mov rdi, %1
+mov rax, 60
+syscall
+%endmacro
+%macro WRITE 2-3 1
+mov rdi, %3
+mov rsi, %1
+mov rdx, %2
+mov rax, 1
+syscall
+%endmacro
+
+%macro print 2
+	mov rsi, %1
+	mov rcx, %2
+	call printhex
+%endmacro
+
+%macro stepone 2
+	mov r11, [R+8*%1]
+	mulx r11, rax, [A+8*%1]
+	mov [R+8*%1], r11
+	adc [R+8*%2], rax
+%endmacro
+
+%macro starttwo 1
+	mov rdx, [B+8*%1]
+	mulx r8, rax, [A+8*0]
+	add [R+8*0], rax
+	adc r8, 0
+	mov r10, [R+8*0]
+	mov [C+8*%1], r10
+	mov rbx, [B+8*%1]
+%endmacro
+
+%macro two_1 2
+	mov r11, [R+8*%1]
+	mulx r9, r11, [A+8*%2]
+	mov [R+8*%1], r11
+	mov r10, [R+8*%2]
+	add [R+8*%1], r10
+	adc r9, 0
+	add [R+8*%1], r8
+	adc r9, 0
+%endmacro
+
+%macro two_2 2
+	mov r11, [R+8*%1]
+	mulx r8, r11, [A+8*%2]
+	mov [R+8*%1],r11
+	mov r10, [R+8*%2]
+	add [R+8*%1], r10
+	adc r8, 0
+	add [R+8*%1], r9
+	adc r8, 0
+%endmacro
